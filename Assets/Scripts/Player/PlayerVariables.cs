@@ -18,6 +18,8 @@ public class PlayerVariables : MonoBehaviour
     [SerializeField] GameObject parentOfCells;//マスの親への参照を入れて。
     GameObject[] cells;
 
+    [SerializeField] Text playerInfomationText;//プレイヤーが止まったマスを文字列で示すためのテキスト
+
 
     int CurrentCell
     {
@@ -98,7 +100,7 @@ public class PlayerVariables : MonoBehaviour
         {
             yield return UpdateCurrentCellWithAnim(1,20);//0.4秒で移動
         }
-        cells[currentCell].GetComponent<DefineCellEvents>().ActivateMassEvent(this);//止まったマスのイベント発動
+        cells[currentCell].GetComponent<DefineCellEvents>().ActivateMassEvent(this, playerInfomationText);//止まったマスのイベント発動
         canTakeDice = true;
         yield return null;
     }
@@ -114,6 +116,7 @@ public class PlayerVariables : MonoBehaviour
         {
             myTF.position = startPos + (endPos - startPos) / flame * i;
             yield return new WaitForFixedUpdate();
+            
         }
 
         yield return null;

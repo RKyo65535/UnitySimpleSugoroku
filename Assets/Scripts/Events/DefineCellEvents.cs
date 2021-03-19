@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DefineCellEvents : MonoBehaviour
 {
+
+    
+
     enum KindOfEvent
     {
-        Nothing,//何も怒らない
+        Nothing = 0,//何も怒らない
         HealthBenefit,//HP回復とか
         Damage,//自身にダメージを与える
         Warp2,//2マス先に進む
-        ReturnToHuridashi
+        ReturnToHuridashi,
+        Warp5
     }
 
 
@@ -18,6 +23,8 @@ public class DefineCellEvents : MonoBehaviour
 
     private void Awake()
     {
+        kindOfEvent = (KindOfEvent)Random.Range(0, System.Enum.GetNames(typeof(KindOfEvent)).Length);
+
         ChangeColor();
     }
 
@@ -39,13 +46,19 @@ public class DefineCellEvents : MonoBehaviour
             case KindOfEvent.Warp2:
                 sp.color = new Color(0.8f, 0.7f, 0.3f);//黄色色にする
                 break;
+            case KindOfEvent.ReturnToHuridashi:
+                sp.color = new Color(0f, 0f, 0f);//漆黒にする
+                break;
+            case KindOfEvent.Warp5:
+                sp.color = new Color(0.5f, 0.5f, 0.5f);//灰になり
+                break;
             default:
                 break;
         }
     }
 
 
-    public void ActivateMassEvent(PlayerVariables player)
+    public void ActivateMassEvent(PlayerVariables player, Text text)
     {
         switch (kindOfEvent)
         {
@@ -54,15 +67,23 @@ public class DefineCellEvents : MonoBehaviour
                 break;
             case KindOfEvent.HealthBenefit:
                 player.UpdateLIfePoint(2);//HPを2回復
+                text.text = "回復した";
                 break;
             case KindOfEvent.Damage:
                 player.UpdateLIfePoint(-3);//HPを-3
+                text.text = "ダメージ受けた";
                 break;
             case KindOfEvent.Warp2:
                 player.UpdateCurrentCell(2);//2マス先に進める
+                text.text = "2マス進んだ";
                 break;
             case KindOfEvent.ReturnToHuridashi:
                 player.UpdateCurrentCell(-999);//2マス先に進める
+                text.text = "振出しに戻った";
+                break;
+            case KindOfEvent.Warp5:
+                player.UpdateCurrentCell(5);//5マス先に進める
+                text.text = "5マス進んだ";
                 break;
             default:
                 break;
